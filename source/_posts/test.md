@@ -1,0 +1,54 @@
+---
+title: React 踩坑总结11(一)
+date: 2020-10-26 22:50:32
+cover: https://ss0.bdstatic.com/70cFuHSh_Q1YnxGkpoWK1HF6hhy/it/u=3558543515,599634311&fm=26&gp=0.jpg
+categories:
+- 前端
+tags:
+- React
+- JS
+
+comments: true
+---
+## React与antd
+
+### 遇到的问题：列表上查看详情弹框如果是表单，数据不更新
+
+*****
+  ***从来新公司，React已经用了有两三个月，接下来一段时间我将分享我的一些想法和遇到的坑。其实React坑还是挺多的，自己也会去尝试摸索，咱们直接来看我遇到的第一个问题***
+
+我想要实现如下的效果:
+![EC3D5932-C47C-467B-9F25-42509F3B39FF.png](https://i.loli.net/2020/11/02/nwkLyFDTad6ZhC9.jpg)  ![A871DFA1-FECC-4898-8D77-61BE1A698517.png](https://i.loli.net/2020/11/02/YB9f2Cm5XTK3rgi.jpg)
+
+贴一下重点的代码：
+    ```
+    const { data } = props;
+    const [form] = Form.useForm();
+    const initFormValues = { price: data.price, curentName: data.curentName };
+    form.resetFields();
+    ```
+我想用resetFields去把表单重置成传入的值，但是这个时候我发现，如果你点击按钮弹框的两个值只会是第一次点按钮的值（比如我点第一个永远是胡彦斌和12），点击后两个查看详情值根本不会变，如果不使用表单确实每次的值都会变化就像这样
+
+![chage-input.png](https://i.loli.net/2020/11/02/XQ6tTh4bJCgoxFj.jpg)
+
+但每次表单校验就没有了，感觉好难受
+
+### 解决方案:使用useEffect只要弹框就进行更新
+
+直接上代码:
+```
+
+useEffect(() => {
+        if(data.visible) {
+            setTimeout(() => {
+                form.resetFields();
+            },0);
+        }
+    });
+```
+如果弹框的依赖数据发生变化，当然这里主要是传入的props数据变化，那么就在开一个宏任务进行resetFields，这里其实有些奇怪，我在公司不用加setTimeout也可以成功，还得再看下
+如果不加data.visible会出现form找不到的警告。
+
+### 反思:React-hooks在闭包的条件下导致数据不更新
+
+[掘金](https://juejin.im/post/6844903922453200904#heading-9)，这个大佬在阐述React-hooks的时候说了一个  在闭包场景可能会引用到旧的state、props值，而initValues正好构成了一个闭包，所以才会导致props下的data不进行更新，这才是这次问题的所在

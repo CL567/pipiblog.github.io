@@ -1,0 +1,11 @@
+title:	网站标题
+subtitle:	博客
+description:	网站描述
+author:	The Long
+language:	Chinese
+default_layout: post
+theme: butterfly
+deploy:
+  type: git
+  repo: https://github.com/chenglong930222/longblog
+  branch: master

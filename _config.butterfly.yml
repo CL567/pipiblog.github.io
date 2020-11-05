@@ -588,7 +588,7 @@ hr_icon:
 
 # the subtitle on homepage (主頁subtitle)
 subtitle:
-  enable: false
+  enable: true
   # Typewriter Effect (打字效果)
   effect: true
   # loop (循環打字)
@@ -623,7 +623,7 @@ aside:
     button:
       icon: fab fa-github
       text: Follow Me
-      link: https://github.com/xxxxxx
+      link: https://github.com/the-clong
   card_announcement:
     enable: true
     content: This is my Blog

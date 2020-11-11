@@ -106,5 +106,5 @@ theme: butterfly
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repo: https://github.com/chenglong930222/longblog
+  repo: https://github.com/the-clong/the-clong.github.io
   branch: master

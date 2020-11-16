@@ -95,7 +95,7 @@ avatar:
   effect: false
 
 # The banner image of home page
-index_img: https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1604639688321&di=6cb2ccd1ec46bc90559a5f0f0c5f6c9c&imgtype=0&src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farchive%2Fdb84e46906737965cbf80d2f31caea027895f394.jpg
+index_img: /img/shashengwan.png
 
 # If the banner of page not setting, it will show the top_img
 default_top_img:
@@ -487,7 +487,7 @@ tag_ui: # 留空或 index
 # Website Background (設置網站背景)
 # can set it to color or image (可設置圖片 或者 顔色)
 # The formal of image: url(http://xxxxxx.com/xxx.jpg)
-background: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1604639688321&di=6cb2ccd1ec46bc90559a5f0f0c5f6c9c&imgtype=0&src=http%3A%2F%2Fi0.hdslb.com%2Fbfs%2Farchive%2Fdb84e46906737965cbf80d2f31caea027895f394.jpg)
+background: url('/img/shashengwan.png')
 
 # Footer Background
 footer_bg: false
@@ -590,13 +590,13 @@ hr_icon:
 subtitle:
   enable: true
   # Typewriter Effect (打字效果)
-  effect: true
+  effect: false
   # loop (循環打字)
   loop: true
   # source調用第三方服務
-  source: true #關閉調用
+  source: https://v1.hitokoto.cn #關閉調用
   # source: 1  調用搏天api的隨機語錄（簡體） https://api.btstu.cn/
-  # source: 2  調用一言網的一句話（簡體） https://hitokoto.cn/
+  # source: https://hitokoto.cn/
   # source: 3  調用一句網（簡體） http://yijuzhan.com/
   # source: 4  調用今日詩詞（簡體） https://www.jinrishici.com/
   # subtitle 會先顯示 source , 再顯示 sub 的內容
@@ -605,8 +605,8 @@ subtitle:
   # 開頭不允許轉義字元，如需要，請把整個句子用雙引號包住
   # 如果關閉打字效果，subtitle只會顯示sub的第一行文字
   sub: 
-    - 今日事&#44;今日毕
-    - Never put off till tomorrow what you can do today
+    - 善良之人应常怀感恩之心
+    # - Never put off till tomorrow what you can do today
 
 # Loading Animation (加載動畫)
 preloader: false
@@ -827,7 +827,17 @@ Open_Graph_meta: true
 
 # Caches the contents in a fragment, speed up the generation (開啟hexo自帶的緩存,加快生成速度)
 fragment_cache: true
-
+live2d:
+	enable: false
+	scriptFrom: local
+	model: 
+		use: live2d-widget-model-tsumiki #模型选择
+	display: 
+		position: right  #模型位置
+		width: 10       #模型宽度
+		height: 200      #模型高度
+	mobile: 
+		show: false      #是否在手机端显示
 # Inject
 # Insert the code to head (before '</head>' tag) and the bottom (before '</body>' tag)
 # 插入代码到头部 </head> 之前 和 底部 </body> 之前
@@ -835,7 +845,7 @@ inject:
   head:
   # - <link rel="stylesheet" href="/xxx.css">
   bottom:
-    # - <script src="xxxx"></script>
+    - <script src="/js/chocolate.js"></script>
 # calendar:
 #     single: true
 #     root: calendar/

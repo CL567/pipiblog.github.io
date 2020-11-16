@@ -42,11 +42,12 @@ useEffect(() => {
                 form.resetFields();
             },0);
         }
-    });
+    },[data]);
 ```
 如果弹框的依赖数据发生变化，当然这里主要是传入的props数据变化，那么就在开一个宏任务进行resetFields，这里其实有些奇怪，我在公司不用加setTimeout也可以成功，还得再看下
 如果不加data.visible会出现form找不到的警告。
 
-### 反思:React-hooks在闭包的条件下导致数据不更新
+### 反思:其实是一开始执行form.resetFields的时候还没有渲染表单，只有当data.visible为true（弹框出来）的时候才会进行渲染，使用宏任务去保证表单渲染时机会更好
 
-[掘金](https://juejin.im/post/6844903922453200904#heading-9)，这个大佬在阐述React-hooks的时候说了一个  在闭包场景可能会引用到旧的state、props值，而initValues正好构成了一个闭包，所以才会导致props传入组件的data不进行更新，这这应该就是问题的原因，有不同意见的小伙伴可以在评论区探讨下。
+
+  

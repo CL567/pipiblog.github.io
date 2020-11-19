@@ -3,7 +3,7 @@
  */
 
 (function($) {
-  console.log(123);
+
   var aCalendar = function(language, options, object) {
     var now = new Date();
     var nDay = now.getDate();
@@ -376,6 +376,6 @@
     url: '/calendar.json'
   };
   $(document).ready(function () {
-      $('#calendar').aCalendar('zh-CN');//'zh-CN'请根据自己博客的语言选择
-  });
+    $('#calendar').aCalendar('zh-CN');//'zh-CN'请根据自己博客的语言选择
+});
 }(jQuery));

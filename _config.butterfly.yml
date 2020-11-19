@@ -60,9 +60,9 @@ algolia_search:
 
 # Local search
 local_search:
-  enable: false
+  enable: true
   labels:
-    input_placeholder: Search for Posts
+    input_placeholder: 请输入搜索关键字
     hits_empty: "We didn't find any results for the search: ${query}" # if there are no result
 
 # Math (數學)
@@ -95,7 +95,7 @@ avatar:
   effect: false
 
 # The banner image of home page
-index_img: /img/shashengwan.png
+index_img: https://cdn.jsdelivr.net/gh/the-clong/the-clong.github.io/img/shashengwan.png
 
 # If the banner of page not setting, it will show the top_img
 default_top_img:
@@ -487,7 +487,7 @@ tag_ui: # 留空或 index
 # Website Background (設置網站背景)
 # can set it to color or image (可設置圖片 或者 顔色)
 # The formal of image: url(http://xxxxxx.com/xxx.jpg)
-background: url('/img/shashengwan.png')
+background: url('https://cdn.jsdelivr.net/gh/the-clong/the-clong.github.io/img/shashengwan.png')
 
 # Footer Background
 footer_bg: false

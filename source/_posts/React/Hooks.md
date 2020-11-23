@@ -6,50 +6,55 @@ tags: React
 # React Hooks是什么
   *hooks开始是为了解决逻辑复用，为函数化专门提供的api*
 # mixins
-  --使用分散加打平的方式将逻辑和状态混入组件中
-  *命名空间冲突：属性名和方法名很容易和组件中冲突，导致被覆盖
-  *很难判断多个mixins中属性从哪里来
-  *需要了解整个mixins才能使用，维护困难
-# HOC(我先给你个组件(dom)，你通过props增强之后返给我)
-  *整个类对于外部来说是不可控的，相当于是一个黑盒。
-  *ref操作dom被隔断。React.createRef
-  *因为父组件无法访问子组件的state，导致无法用shouldComponentUpdate进行过滤渲染 React.pureComponent。
-  *如果多层嵌套需要注意props上的属性覆盖问题
-  *整体需要嵌套一层类组件
-  网上摘抄的demo
-  ```
-  import React from 'react';
-  const withSecretToLife = (WrappedComponent) => {
-    class HOC extends React.Component {
-      render() {
-        return (
-          <WrappedComponent
-            secretToLife={42}
-            {...this.props}
-          />
-        );
-      }
+  使用分散加打平的方式将逻辑和状态混入组件中
+  * 命名空间冲突：属性名和方法名很容易和组件中冲突，导致被覆盖
+  * 很难判断多个mixins中属性从哪里来
+  * 需要了解整个mixins才能使用，维护困难
+
+
+# HOC
+我先给你个组件(dom)，你通过props增强之后返给我
+* 整个类对于外部来说是不可控的，相当于是一个黑盒。
+* ref操作dom被隔断。React.createRef
+* 因为父组件无法访问子组件的state，导致无法用shouldComponentUpdate进行过滤渲染 React.pureComponent。
+* 如果多层嵌套需要注意props上的属性覆盖问题
+* 整体需要嵌套一层类组件
+网上摘抄的demo
+```
+import React from 'react';
+const withSecretToLife = (WrappedComponent) => {
+  class HOC extends React.Component {
+    render() {
+      return (
+        <WrappedComponent
+          secretToLife={42}
+          {...this.props}
+        />
+      );
     }
-    return HOC;
-  };
-  export default withSecretToLife;
+  }
+  return HOC;
+};
+export default withSecretToLife;
 
 
-  import React from 'react';
-  import withSecretToLife from 'components/withSecretToLife';
-  const DisplayTheSecret = props => (
-    <div>
-      The secret to life is {props.secretToLife}.
-    </div>
-  );
-  const WrappedComponent = withSecretToLife(DisplayTheSecret);
-  export default WrappedComponent;
-  ```
-# Render props(我把dom和state通过render给你，你帮我用你的属性或者方法直接渲染出来)
-  render props可以解决除了最后一条所有的问题
-  *通过render属性自己控制state渲染
-  *多层嵌套，在一个组件中命名就不会冲突
-  *区别在于可不可以直接传递dom*
+import React from 'react';
+import withSecretToLife from 'components/withSecretToLife';
+const DisplayTheSecret = props => (
+  <div>
+    The secret to life is {props.secretToLife}.
+  </div>
+);
+const WrappedComponent = withSecretToLife(DisplayTheSecret);
+export default WrappedComponent;
+```
+
+# Render props
+我把dom和state通过render给你，你帮我用你的属性或者方法直接渲染出来
+render props可以解决除了最后一条所有的问题
+* 通过render属性自己控制state渲染
+* 多层嵌套，在一个组件中命名就不会冲突
+*区别在于可不可以直接传递dom*
 ```
   import React from 'react';
   const SharedComponent extends React.Component {
@@ -72,15 +77,20 @@ tags: React
     )} />
   );
 ```
+
 # Hooks
   ## 优点
-  *解决了hoc和render props需要嵌套一层的问题，(props传递加useRef)
-  *解决了mixins中状态和方法来源不清和命名的问题(自定义hooks)
-  *解决了类组件中将逻辑分散到各个生命周期，或者需要释放内存的操作，(useEffect和监听依赖)
-  *类组件改函数组件，类组件有自己的作用域，会降低性能
+  * 解决了hoc和render props需要嵌套一层的问题，(props传递加useRef)
+  * 解决了mixins中状态和方法来源不清和命名的问题(自定义hooks)
+  * 解决了类组件中将逻辑分散到各个生命周期，或者需要释放内存的操作，(useEffect和监听依赖)
+  * 类组件改函数组件，类组件有自己的作用域，会降低性能
+
+
   ## 缺点
-  *必须在函数头部进行声明，无法在for循环或者if判断中进行声明
-  *需要自己指定依赖，就算有eslint-plugin-react-hooks这种类似的插件，也会有警告，包括无效的依赖存在
+  * 必须在函数头部进行声明，无法在for循环或者if判断中进行声明
+  * 需要自己指定依赖，就算有eslint-plugin-react-hooks这种类似的插件，也会有警告，包括无效的依赖存在
+
+
   ## useState
   1.定义:
   ```
@@ -136,7 +146,7 @@ tags: React
   ```
   2.理解：在DOM渲染之后进行一些操作，相当于vue的mounted。
   一般进行一些副作用操作，像发请求，对DOM操作，定时器等等，每一次effect之后都会重新render，所以把定时器放在effect里边，重新render之后自动释放，不会造成内存泄露
-# useMemo
+  ## useMemo
   1.用来缓存元素，比如大量的dom计算，如果state变化就会重新渲染，看下下边的例子：
   ```
   const nameList = ['apple', 'peer', 'banana', 'lemon']

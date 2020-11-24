@@ -185,6 +185,9 @@ render props可以解决除了最后一条所有的问题
 export default MemoExample
 ```
 注意:如果只想在name改变的时候重新渲染，需要使用memo做下渲染元素的优化
+通过观察我们可以发现useMemo是在渲染中执行的，所以不要在内部执行渲染无关的操作(比如setState等等，会重复渲染页面，或者执行其他回调)
+
+
 想象以下的场景，现在有多个按钮，每个按钮都共享一个状态count，我们用React.memo缓存每个button，期望点击每个按钮都只渲染一次，代码如下：
 ```
 const CountButton = React.memo(function CountButton({onClick, count}) {
@@ -206,8 +209,8 @@ function DualCounter() {
   )
 }
 ```
-我们预想的是在缓存了页面之后CountButton不会重新渲染，但是我们点击之后button的组件依旧会渲染两次，原因是React Hooks每次渲染都是相互独立的，传入的函数因为没有做缓存，每次传入的都是一个新的函数对象，所以才会渲染两次，我们使用useCallback包括函数const increment1 = useCallback() => setCount1(c => c + 1), [count1]);最好指定下依赖。
-2.当我们需要fetchData变化来初始化一个函数时候，需要用useCallback
+我们预想的是在缓存了页面之后CountButton不会重新渲染，但是我们点击之后button的组件依旧会渲染两次，原因是React Hooks每次渲染都是相互独立的，传入的函数因为没有做缓存，每次传入的都是一个新的函数对象，所以才会渲染两次，我们使用useCallback包括函数const increment1 = useCallback() => setCount1(c => c + 1), [count1]);这里最好指定下依赖。
+2.当我们需要fetchData变化来缓存一个函数时候，需要用useCallback
 3.用来缓存数据，像上面的函数如果变成对象可以用useMemo缓存，vue中的计算属性也可以用useMemo来缓存，还有像useAsyncMemo这种，不过他需要npm安装 npm install use-async-memo --save
 还可以加上防抖的逻辑：
 ```

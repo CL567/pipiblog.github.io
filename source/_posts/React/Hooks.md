@@ -183,13 +183,14 @@ render props可以解决除了最后一条所有的问题
     )
 }
 export default MemoExample
+
 ```
 注意:如果只想在name改变的时候重新渲染，需要使用memo做下渲染元素的优化
 通过观察我们可以发现useMemo是在渲染中执行的，所以不要在内部执行渲染无关的操作(比如setState等等，会重复渲染页面，或者执行其他回调)
 
-
 想象以下的场景，现在有多个按钮，每个按钮都共享一个状态count，我们用React.memo缓存每个button，期望点击每个按钮都只渲染一次，代码如下：
 ```
+
 const CountButton = React.memo(function CountButton({onClick, count}) {
   return <button onClick={onClick}>{count}</button>
 })
@@ -209,6 +210,7 @@ function DualCounter() {
   )
 }
 ```
+
 我们预想的是在缓存了页面之后CountButton不会重新渲染，但是我们点击之后button的组件依旧会渲染两次，原因是React Hooks每次渲染都是相互独立的，传入的函数因为没有做缓存，每次传入的都是一个新的函数对象，所以才会渲染两次，我们使用useCallback包括函数const increment1 = useCallback() => setCount1(c => c + 1), [count1]);这里最好指定下依赖。
 2.当我们需要fetchData变化来缓存一个函数时候，需要用useCallback
 3.用来缓存数据，像上面的函数如果变成对象可以用useMemo缓存，vue中的计算属性也可以用useMemo来缓存，还有像useAsyncMemo这种，不过他需要npm安装 npm install use-async-memo --save
@@ -221,5 +223,159 @@ function DualCounter() {
     return await apiService.searchUsers(debouncedInput)
   }, [debouncedInput], [])
 ```
+
 ## useReducer
-  
+
+1.定义:
+const [state,dispatch] = useReducer(reducer,state)
+2.调用:dispatch({type: 'add'})
+3.使用场景：useState的替代方案，当一次动作需要多个state一起变化的时候使用，目的是将做什么(dispatch)和怎么做(action)分开，将表现（UI）和逻辑（业务分开），并且useReducer可以避免setState的多次渲染
+4.官方示例:
+```
+  // 官方 useReducer Demo
+    // 第一个参数：应用的初始化
+    const initialState = {count: 0};
+
+    // 第二个参数：state的reducer处理函数
+    function reducer(state, action) {
+        switch (action.type) {
+            case 'increment':
+              return {count: state.count + 1};
+            case 'decrement':
+               return {count: state.count - 1};
+            default:
+                throw new Error();
+        }
+    }
+
+    function Counter() {
+        // 返回值：最新的state和dispatch函数
+        const [state, dispatch] = useReducer(reducer, initialState);
+        return (
+            <>
+                // useReducer会根据dispatch的action，返回最终的state，并触发rerender
+                Count: {state.count}
+                // dispatch 用来接收一个 action参数「reducer中的action」，用来触发reducer函数，更新最新的状态
+                <button onClick={() => dispatch({type: 'increment'})}>+</button>
+                <button onClick={() => dispatch({type: 'decrement'})}>-</button>
+            </>
+        );
+    }
+```
+
+## useContext
+
+1.定义:const ThemeContext = React.createContext(value);
+<ThemeContext.Provider value={themes.dark}>
+  <Toolbar />
+</ThemeContext.Provider>
+2.使用:创建一个context对象，初始化value，通过context的provider将value传入ThemeContext组件中，在ThemeContext中使用useContext获取，主要跨组件之间状态的共享
+3.当传入的value变化，context会重新渲染，不管组件是否memo过
+4.示例:
+```
+  import React, { useContext } from "react";
+import ReactDOM from "react-dom";
+
+const TestContext= React.createContext({});
+
+const Navbar = () => {
+  const { username } = useContext(TestContext)
+
+  return (
+    <div className="navbar">
+      <p>{username}</p>
+    </div>
+  )
+}
+
+const Messages = () => {
+  const { username } = useContext(TestContext)
+
+  return (
+    <div className="messages">
+      <p>1 message for {username}</p>
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <TestContext.Provider
+      value={{
+        username: 'superawesome',
+      }}
+    >
+      <div className="test">
+        <Navbar />
+        <Messages />
+      </div>
+    <TestContext.Provider/>
+  );
+}
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
+```
+
+5.结合useReducer和useContext，组件可以改变一些公共的state，一般是同步的需要渲染的
+
+```
+  const initialState = 0;
+function reducer(state=initialState,action){
+    switch(action.type){
+        case 'ADD':
+            return {number:state.number+1};
+        default:
+            break;
+    }
+}
+function SubCounter(){
+    const {state, dispatch} = useContext(CounterContext);
+    return (
+        <>
+            <p>{state.number}</p>
+            <button onClick={()=>dispatch({type:'ADD'})}>+</button>
+        </>
+    )
+}
+
+function Counter(){
+    const [state, dispatch] = useReducer((reducer), initialState, ()=>({number:initialState}));
+    return (
+        <CounterContext.Provider value={{state, dispatch}}>
+            <SubCounter/>
+        </CounterContext.Provider>
+    )
+}
+```
+
+使用context共享reducer的方法和初始状态，让provider中所有的组件都可以使用
+6.是否可以替代redux和mobx:  *当然是不可以的了*
+redux和mobx针对的是全局store，比如登录态或者全局menu等等，而且配合有redux-saga或者redux-thunk支持异步action
+
+## 自定义hooks
+
+取代hoc和render props，将公共逻辑写在自定义hooks中
+比如我们现在有多个弹框，弹框中有select框，input框，整体是一个form表单，datepicker这种等等，我们可以把获取下拉框数据和提交表单封装成公共的逻辑放在自定义hooks中，也可以把每个弹框都定义成一个hook，用来配合UI初始化语法类似于这样:
+const [state, setState, submitFn, ] = useModal();
+
+
+# 总结
+* 与类组件不同的是，使用react hooks每次渲染都是独立的，并不会记住前一次渲染的结果，使用useRef.current去记住原先的状态
+* 所有hooks都是根据依赖来执行回调，避免将逻辑分散在不同的生命周期中，所以依赖的选择至关重要
+* 使用useEffect在DOM渲染之后进行一些副作用操作，比如请求数据等等
+* useMemo和useCallback用来缓存对象函数或者DOM元素，减少元素的渲染次数
+* useReducer和useContext配合在几个组件中共享state，不能是异步action
+* 自定义hooks用来封装公共的逻辑和组件行为
+* 最后补一个useDebounce和useThrottle进行防抖和节流
+
+
+参考文章:
+       [这一次彻底搞定useReducer-使用篇](https://www.jianshu.com/p/566f0d79ca7b)
+       [React Hook之useContext的介绍与使用](https://blog.csdn.net/weixin_43606158/article/details/100750602)
+       [React Hooks 详解 【近 1W 字】+ 项目实战](https://juejin.cn/post/6844903985338400782#heading-14)
+       [React Hooks 最佳实践](https://juejin.cn/post/6844904165500518414#heading-11)
+       [使用React hooks实现Vue的“计算属性”](https://zhuanlan.zhihu.com/p/80607611)
+       [useMemo和useEffect有什么区别？怎么使用useMemo](https://www.jianshu.com/p/94ace269414d)
+       [React组件Render Props VS HOC 设计模式](https://www.imooc.com/article/79154)
+       [什么时候使用 USEMEMO 和 USECALLBACK](https://www.freesion.com/article/5948405874/)

@@ -827,17 +827,6 @@ Open_Graph_meta: true
 
 # Caches the contents in a fragment, speed up the generation (開啟hexo自帶的緩存,加快生成速度)
 fragment_cache: true
-live2d:
-	enable: false
-	scriptFrom: local
-	model: 
-		use: live2d-widget-model-tsumiki #模型选择
-	display: 
-		position: right  #模型位置
-		width: 10       #模型宽度
-		height: 200      #模型高度
-	mobile: 
-		show: false      #是否在手机端显示
 # Inject
 # Insert the code to head (before '</head>' tag) and the bottom (before '</body>' tag)
 # 插入代码到头部 </head> 之前 和 底部 </body> 之前

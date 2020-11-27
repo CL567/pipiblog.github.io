@@ -55,7 +55,8 @@ render props可以解决除了最后一条所有的问题
 
 * 通过render属性自己控制state渲染
 * 多层嵌套，在一个组件中命名就不会冲突
-*区别在于可不可以直接传递dom*
+* 区别在于可不可以直接传递dom
+
 ```
   import React from 'react';
   const SharedComponent extends React.Component {
@@ -141,7 +142,7 @@ render props可以解决除了最后一条所有的问题
   ```
   我们先点击下面的Delay setCount，然后再点击上面的setCount，会发现p中的count变成了最新的值，而alert出来的还是初始值0
   4.所以在每次render的时候state也有自己的初始值
-  5.setState和useState的区别：setState会维护一个队列，如果多次setState会合并成一次进行渲染（异步），在受控的情况下是异步的，setTimeout或者操作DOM的时候是同步的，useState使用Object.is进行比较，如果值不变就不会重新渲染，如果值不同直接用新替换旧，useState总是异步的
+  5.setState和useState的区别：setState会维护一个队列，如果多次setState会合并成一次进行渲染（异步），在受控的情况下是异步的，setTimeout或者操作DOM的时候是同步的，useState使用Object.is进行比较，如果值不变就不会重新渲染，如果值不同直接用新替换旧，而且useState总是异步的
   ## useEffect
   1.定义：
   ```
@@ -173,10 +174,11 @@ render props可以解决除了最后一条所有的问题
   export default LayoutDemo;
   ```
 
-  ## useMemo
+  ## useMemo && useCallback
   1.不同于useEffect在DOM渲染之后执行，useMemo在渲染中进行useMemo -> render -> useEffect，看下下边的例子：
   ```
   const nameList = ['apple', 'peer', 'banana', 'lemon']
+  var aaa = 1;
   const MemoExample = (props: any) => {
     const [price, setPrice] = useState(0)
     const [name, setName] = useState('apple')
@@ -245,8 +247,7 @@ function DualCounter() {
 ```
 
 我们预想的是在缓存了页面之后CountButton不会重新渲染，但是我们点击之后button的组件依旧会渲染两次，原因是React Hooks每次渲染都是相互独立的，传入的函数因为没有做缓存，每次传入的都是一个新的函数对象，所以才会渲染两次，我们使用useCallback包括函数const increment1 = useCallback() => setCount1(c => c + 1), [count1]);这里最好指定下依赖。
-2.当我们需要fetchData变化来缓存一个函数时候，需要用useCallback
-3.当我们需要在DOM频繁变化的时候去请求接口（比如文本框输入的同时自动搜索），需要npm安装 npm install use-async-memo --save
+2.当我们需要在DOM频繁变化的时候去请求接口（比如文本框输入的同时自动搜索），需要npm安装 npm install use-async-memo --save
 还可以加上防抖的逻辑：
 ```
   const [input, setInput] = useState()
@@ -298,15 +299,18 @@ const [state,dispatch] = useReducer(reducer,state)
 
 ## useContext
 
-1.定义:const ThemeContext = React.createContext(value);
-<ThemeContext.Provider value={themes.dark}>
-  <Toolbar />
-</ThemeContext.Provider>
+1.定义:
+```
+  const ThemeContext = React.createContext(value);
+  <ThemeContext.Provider value={themes.dark}>
+    <Toolbar />
+  </ThemeContext.Provider>
+```
 2.使用:创建一个context对象，初始化value，通过context的provider将value传入ThemeContext组件中，在ThemeContext中使用useContext获取，主要跨组件之间状态的共享
 3.当传入的value变化，context会重新渲染，不管组件是否memo过
 4.示例:
 ```
-  import React, { useContext } from "react";
+import React, { useContext } from "react";
 import ReactDOM from "react-dom";
 
 const TestContext= React.createContext({});

@@ -4,6 +4,11 @@
   background-attachment: local
   background-position: bottom
   background-size: cover
+  background: rgba(255,255,255,.15);
+  color: #000;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
+  backdrop-filter: saturate(100%) blur(5px)
 
   if hexo-config('footer_bg') != false
     &:before
@@ -12,15 +17,16 @@
       height: 100%
       background-color: alpha($dark-black, .5)
       content: ''
+      background: rgba(255,255,255,.15)
 
 #footer-wrap
   position: relative
   padding: 2rem 1rem
-  color: var(--light-grey)
   text-align: center
+  color: var(--font-color);
 
   a
-    color: var(--light-grey)
+    color: var(--font-color);
 
     &:hover
       text-decoration: underline

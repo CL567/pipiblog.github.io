@@ -49,6 +49,6 @@ $(function(){
   bubble();
   
   /* xkTool */
-  var chocolate = new xkTool();
-  chocolate.footFish();
+//   var chocolate = new xkTool();
+//   chocolate.footFish();
   })

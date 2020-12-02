@@ -13,7 +13,6 @@
     "version": "5.2.0"
   },
   "dependencies": {
-    "hexo": "^5.2.0",
     "@babel/core": "^7.12.9",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
@@ -31,6 +30,7 @@
     "gulp-minify-css": "^1.2.4",
     "gulp-plumber": "^1.2.1",
     "gulp-uglify": "^3.0.2",
+    "hexo": "^5.2.0",
     "hexo-deployer-git": "^2.1.0",
     "hexo-generator-archive": "^1.0.0",
     "hexo-generator-category": "^1.0.0",

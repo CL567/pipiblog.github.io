@@ -10,10 +10,9 @@ keywords:
 author:	The Long
 language: zh-CN
 timezone: ''
-
 # URL
 ## If your site is put in a subdirectory, set url as 'http://example.com/child' and root as '/child/'
-url: http://example.com
+url: https://the-clong.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -45,14 +44,14 @@ post_asset_folder: false
 relative_link:
 future: true
 highlight:
-  enable: true
-  line_number: true
+  enable: false
+  line_number: false
   auto_detect: false
   tab_replace: ''
   wrap: true
   hljs: false
 prismjs:
-  enable: false
+  enable:  true
   preprocess: true
   line_number: true
   tab_replace: ''

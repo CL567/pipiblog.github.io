@@ -26,24 +26,23 @@ tags: React
 <code class="language-js">
 import React from 'react';
 import withSecretToLife from 'components/withSecretToLife';
-const DisplayTheSecret = props => (
-  ```
+const DisplayTheSecret = props =>
+```
+(
   <div>
     The secret to life is {props.secretToLife}.
   </div>
-  ```
 );
+```
 const WrappedComponent = withSecretToLife(DisplayTheSecret);
 export default WrappedComponent;
 import React from 'react';
 const withSecretToLife = (WrappedComponent) => {
   class HOC extends React.Component {
     render() {
-      return (
-        ```
-        <WrappedComponent secretToLife={42} {...this.props}/>
-        ```
-      );
+      ```
+      return (<WrappedComponent secretToLife={42} {...this.props}/>);
+      ```
     }
   }
   return HOC;
@@ -63,24 +62,23 @@ render props可以解决除了最后一条所有的问题
 
 <pre>
 <code class="language-js">
-```
 import React from 'react';
 const SharedComponent extends React.Component {
   state = {...}
   render() {
-    return (
-      <> {this.props.render(this.state)} </>
-    );
+    ```
+    return (<> {this.props.render(this.state)} </>);
+    ```
   }
 }
 export default SharedComponent;
 import React from 'react';
 import SharedComponent from 'components/SharedComponent';
-const SayHello = () => (
-  <SharedComponent render={(state) => (
-    <span>hello!,{...state}</span>
-  )} />
-);
+const SayHello = () => 
+```
+(<SharedComponent render={(state) => (
+  <span>hello!,{...state}</span>
+)}/>);
 ```
 </code>
 </pre>
@@ -109,82 +107,80 @@ const [state, setState] = useState(0);
   2.每次渲染都会具有独立的props和state，不同于类组件需要将state挂载到this上（每次渲染是独立的，属性也是独立的，函数需要重新创建），我们来看两个例子
 <pre>
 <code class="language-js">
-  // 父组件的count每隔一秒加1
-  handleClick = () => { // 类组件
-      setTimeout(() => {
-          alert(this.props.count); // 三秒结束之后输出最新值3
-      }, 3000);
-  };
-  handleClick = () => { // hooks组件
-      setTimeout(() => {
-          alert(props.count); // 三秒结束之后输出初始值0
-      }, 3000);
-  };
+// 父组件的count每隔一秒加1
+handleClick = () => { // 类组件
+    setTimeout(() => {
+        alert(this.props.count); // 三秒结束之后输出最新值3
+    }, 3000);
+};
+handleClick = () => { // hooks组件
+    setTimeout(() => {
+        alert(props.count); // 三秒结束之后输出初始值0
+    }, 3000);
+};
 </code>
 </pre>
-  由此，我们可以得出结论：hooks组件在每次渲染的时候都有自己的props。
-  3.我们将上面的props变成state试下
+由此，我们可以得出结论：hooks组件在每次渲染的时候都有自己的props。
+3.我们将上面的props变成state试下
 <pre>
-  <code class="language-js">
-  const Example = () => {
-    const [count,setCount] = useState(0);
-    handleClick = () => {
-        setTimeout(() => {
-            alert(count);
-        }, 3000);
-    };
-    handleCountClick = () => { // 类组件
-        setCount(count + 1);
-    };
-    return (
-        <Fragment>
-            <p>{count}</p>
-            <button onClick={handleCountClick}>
-                setCount
-            </button>
-            <button onClick={handleClick}>
-                Delay setCount
-            </button>
-        </Fragment>
-    );
-  }
-  </code>
+<code class="language-js">
+const Example = () => {
+  const [count,setCount] = useState(0);
+  handleClick = () => {
+      setTimeout(() => {
+          alert(count);
+      }, 3000);
+  };
+  handleCountClick = () => { // 类组件
+      setCount(count + 1);
+  };
+  ```
+  return (
+      <Fragment>
+          <p>{count}</p>
+          <button onClick={handleCountClick}>
+              setCount
+          </button>
+          <button onClick={handleClick}>
+              Delay setCount
+          </button>
+      </Fragment>);
+  ```
+}
+</code>
 </pre>
   我们先点击下面的Delay setCount，然后再点击上面的setCount，会发现p中的count变成了最新的值，而alert出来的还是初始值0
   4.所以在每次render的时候state也有自己的初始值
   5.setState和useState的区别：setState会维护一个队列，如果多次setState会合并成一次进行渲染（异步），在受控的情况下是异步的，setTimeout或者操作DOM的时候是同步的，useState使用Object.is进行比较，如果值不变就不会重新渲染，如果值不同直接用新替换旧，而且useState总是异步的
   ## useEffect
   1.定义：
-
 <pre>
 <code class="language-js">
 useEffect(() => {}, [dep]);
 </code>
 </pre>
-
-  2.理解：在DOM渲染之后进行一些操作，相当于vue的mounted。
-  一般进行一些副作用操作，像发请求，对DOM操作，定时器等等，每一次effect之后都会重新render，所以把定时器放在effect里边，重新render之后自动释放，不会造成内存泄露
-  ## useLayoutEffect
-    会在浏览器 layout 之后，painting 之前执行，useEffect会在painting之后执行
+2.理解：在DOM渲染之后进行一些操作，相当于vue的mounted。
+一般进行一些副作用操作，像发请求，对DOM操作，定时器等等，每一次effect之后都会重新render，所以把定时器放在effect里边，重新render之后自动释放，不会造成内存泄露
+## useLayoutEffect
+会在浏览器 layout 之后，painting 之前执行，useEffect会在painting之后执行
 <pre>
 <code class="language-js">
 const LayoutDemo = () => {
   const [count, setCount] = React.useState(0);
-
   React.useEffect(() => {
     // 耗时 300 毫秒的计算
     const start = +new Date();
-    while (+new Date() - start <= 300) {
+    while (300 >= (+new Date() - start)) {
       continue;
     }
     if (count === 0) {
       setCount(Math.random());
     }
   }, [count]);
-
   const handleClick = React.useCallback(() => setCount(0), []);
-
+  ```
   return <button onClick={handleClick}>{count}</button>;
+  ```
 };
 export default LayoutDemo;
 </code>
@@ -192,42 +188,42 @@ export default LayoutDemo;
 
   ## useMemo && useCallback
   1.不同于useEffect在DOM渲染之后执行，useMemo在渲染中进行useMemo -> render -> useEffect，看下下边的例子：
-  <pre>
-  <code class="language-js">
-  
-  const nameList = ['apple', 'peer', 'banana', 'lemon'];
-  var aaa = 1;
-  const MemoExample = (props: any) => {
-    const [price, setPrice] = useState(0)
-    const [name, setName] = useState('apple')
-    let getProductName = () => {
-        console.log('getProductName触发')
-        return name
-    };
-    // 只对name响应
-    useEffect(() => {
-        console.log('name effect 触发')
-    }, [name])
-    // 只对price响应
-    useEffect(() => {
-        console.log('price effect 触发')
-    }, [price])
-  
-    // memo化的getProductName函数
-    const memo_getProductName = useMemo(() => {
-        console.log('name memo 触发')
-        return () => name  // 返回一个函数
-    }, [name]);
-    return (
-        <Fragment>
-            <p>{name}</p>
-            <p>{price}</p>
-            <p>普通的name：{getProductName()}</p>
-            <p>memo化的：{memo_getProductName ()}</p>
-            <button onClick={() => setPrice(price+1)}>价钱+1</button>
-            <button onClick={() => setName(nameList[Math.random() * nameList.length << 0])}>修改名字</button>
-        </Fragment>
-    )
+<pre>
+<code class="language-js">
+const nameList = ['apple', 'peer', 'banana', 'lemon'];
+var aaa = 1;
+const MemoExample = (props: any) => {
+  const [price, setPrice] = useState(0)
+  const [name, setName] = useState('apple')
+  let getProductName = () => {
+      console.log('getProductName触发')
+      return name
+  };
+  // 只对name响应
+  useEffect(() => {
+      console.log('name effect 触发')
+  }, [name])
+  // 只对price响应
+  useEffect(() => {
+      console.log('price effect 触发')
+  }, [price])
+
+  // memo化的getProductName函数
+  const memo_getProductName = useMemo(() => {
+      console.log('name memo 触发')
+      return () => name  // 返回一个函数
+  }, [name]);
+  ```
+  return (
+      <Fragment>
+          <p>{name}</p>
+          <p>{price}</p>
+          <p>普通的name：{getProductName()}</p>
+          <p>memo化的：{memo_getProductName ()}</p>
+          <button onClick={() => setPrice(price+1)}>价钱+1</button>
+          <button onClick={() => setName(nameList[Math.random() * nameList.length << 0])}>修改名字</button>
+      </Fragment>)
+  ```
 }
 export default MemoExample
 </code>
@@ -239,7 +235,7 @@ export default MemoExample
   ① 进行某个值的计算，相当于vue的computed
 <pre>
 <code class="language-js">
-  const memoizedValue = useMemo(() => (a + b), [a, b]);
+const memoizedValue = useMemo(() => (a + b), [a, b]);
 </code>
 </pre>
   ② 用来缓存元素，相当于React.pureComponent，主要是防止不相关元素对复杂元素的重新渲染
@@ -249,7 +245,9 @@ export default MemoExample
 <pre>
 <code class="language-js">
 const CountButton = React.memo(function CountButton({onClick, count}) {
+  ```
   return <button onClick={onClick}>{count}</button>
+  ```
 })
 
 function DualCounter() {
@@ -258,15 +256,13 @@ function DualCounter() {
 
   const [count2, setCount2] = React.useState(0)
   const increment2 = () => setCount2(c => c + 1)
-
+  ```
   return (
-    ```
     <>
-        <CountButton count={count1} onClick={increment1} />
-        <CountButton count={count2} onClick={increment2} />
-      </>
-      ```
-  )
+      <CountButton count={count1} onClick={increment1} />
+      <CountButton count={count2} onClick={increment2} />
+    </>)
+  ```
 }
 </code>
 </pre>
@@ -313,17 +309,16 @@ const [state,dispatch] = useReducer(reducer,state)
   function Counter() {
       // 返回值：最新的state和dispatch函数
       const [state, dispatch] = useReducer(reducer, initialState);
+      ```
       return (
-        ```
           <>
               // useReducer会根据dispatch的action，返回最终的state，并触发rerender
               Count: {state.count}
               // dispatch 用来接收一个 action参数「reducer中的action」，用来触发reducer函数，更新最新的状态
               <button onClick={() => dispatch({type: 'increment'})}>+</button>
               <button onClick={() => dispatch({type: 'decrement'})}>-</button>
-          </>
-          ```
-      );
+          </>);
+      ```
   }
 </code>
 </pre>
@@ -354,30 +349,30 @@ const TestContext= React.createContext({});
 const Navbar = () => {
   const { username } = useContext(TestContext)
 
+  ```
   return (
-    ```
       <div className="navbar">
         <p>{username}</p>
       </div>
-    ```
   )
+  ```
 }
 
 const Messages = () => {
   const { username } = useContext(TestContext)
 
+  ```
   return (
-    ```
     <div className="messages">
       <p>1 message for {username}</p>
     </div>
-    ```
   )
+  ```
 }
 
 function App() {
+  ```
   return (
-    ```
     <TestContext.Provider
       value={{
         username: 'superawesome',
@@ -388,8 +383,8 @@ function App() {
         <Messages />
       </div>
     <TestContext.Provider/>
-    ```
   );
+  ```
 }
 
 const rootElement = document.getElementById("root");
@@ -398,12 +393,9 @@ ReactDOM.render(<App />, rootElement);
 ```
 </code>
 </pre>
-
 5.结合useReducer和useContext，组件可以改变一些公共的state，一般是同步的需要渲染的
-
 <pre>
 <code class="language-js">
-```
 const initialState = 0;
 function reducer(state=initialState,action){
     switch(action.type){
@@ -415,16 +407,19 @@ function reducer(state=initialState,action){
 }
 function SubCounter(){
     const {state, dispatch} = useContext(CounterContext);
+    ```
     return (
         <>
             <p>{state.number}</p>
             <button onClick={()=>dispatch({type:'ADD'})}>+</button>
         </>
     )
+    ```
 }
 
 function Counter(){
     const [state, dispatch] = useReducer((reducer), initialState, ()=>({number:initialState}));
+    ```
     return (
       <>
         <CounterContext.Provider value={{state, dispatch}}>
@@ -432,8 +427,8 @@ function Counter(){
         </CounterContext.Provider>
         </>
     )
+    ```
 }
-```
 </code>
 </pre>
 

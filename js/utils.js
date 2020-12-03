@@ -1,1 +1,149 @@
-var btf={debounce:function(i,o,a){var r=void 0;return function(){var t=this,e=arguments,n=a&&!r;clearTimeout(r),r=setTimeout(function(){r=null,a||i.apply(t,e)},o),n&&i.apply(t,e)}},throttle:function(n,i,o){var a=void 0,r=void 0,s=void 0,d=0;o=o||{};function u(){d=!1===o.leading?0:(new Date).getTime(),a=null,n.apply(r,s),a||(r=s=null)}return function(){var t=(new Date).getTime();d||!1!==o.leading||(d=t);var e=i-(t-d);r=this,s=arguments,e<=0||i<e?(a&&(clearTimeout(a),a=null),d=t,n.apply(r,s),a||(r=s=null)):a||!1===o.trailing||(a=setTimeout(u,e))}},sidebarPaddingR:function(){var t=window.innerWidth,e=document.body.clientWidth,n=t-e;t!==e&&$("body").css("padding-right",n)},scrollToDest:function(t){var e=$(t).offset().top,t=void 0,t=$(window).scrollTop()>e?65:0;$("body,html").animate({scrollTop:e-t})},snackbarShow:function(t,e,n){var i=void 0!==e&&e,o=void 0!==n?n:2e3,e=GLOBAL_CONFIG.Snackbar.position,n="light"===document.documentElement.getAttribute("data-theme")?GLOBAL_CONFIG.Snackbar.bgLight:GLOBAL_CONFIG.Snackbar.bgDark;Snackbar.show({text:t,backgroundColor:n,showAction:i,duration:o,pos:e})},initJustifiedGallery:function(t){t.each(function(t,e){$(this).is(":visible")&&$(this).justifiedGallery({rowHeight:220,margins:4})})},diffDate:function(t,e){var n,i,o=1<arguments.length&&void 0!==e&&e,a=new Date,r=new Date(t),s=a.getTime()-r.getTime(),d=864e5;return o?(n=s/d,i=s/36e5,a=s/6e4,12<(o=s/2592e6)?r.toLocaleDateString().replace(/\//g,"-"):1<=o?parseInt(o)+" "+GLOBAL_CONFIG.date_suffix.month:1<=n?parseInt(n)+" "+GLOBAL_CONFIG.date_suffix.day:1<=i?parseInt(i)+" "+GLOBAL_CONFIG.date_suffix.hour:1<=a?parseInt(a)+" "+GLOBAL_CONFIG.date_suffix.min:GLOBAL_CONFIG.date_suffix.just):parseInt(s/d)},loadComment:function(t,e){var n;"IntersectionObserver"in window?(n=new IntersectionObserver(function(t){t[0].isIntersecting&&(e(),n.disconnect())},{threshold:[0]})).observe(t):e()}};
+/* eslint-disable no-unused-vars */
+
+var btf = {
+  debounce: function (func, wait, immediate) {
+    let timeout
+    return function () {
+      const context = this
+      const args = arguments
+      const later = function () {
+        timeout = null
+        if (!immediate) func.apply(context, args)
+      }
+      const callNow = immediate && !timeout
+      clearTimeout(timeout)
+      timeout = setTimeout(later, wait)
+      if (callNow) func.apply(context, args)
+    }
+  },
+
+  throttle: function (func, wait, options) {
+    let timeout, context, args
+    let previous = 0
+    if (!options) options = {}
+
+    const later = function () {
+      previous = options.leading === false ? 0 : new Date().getTime()
+      timeout = null
+      func.apply(context, args)
+      if (!timeout) context = args = null
+    }
+
+    const throttled = function () {
+      const now = new Date().getTime()
+      if (!previous && options.leading === false) previous = now
+      const remaining = wait - (now - previous)
+      context = this
+      args = arguments
+      if (remaining <= 0 || remaining > wait) {
+        if (timeout) {
+          clearTimeout(timeout)
+          timeout = null
+        }
+        previous = now
+        func.apply(context, args)
+        if (!timeout) context = args = null
+      } else if (!timeout && options.trailing !== false) {
+        timeout = setTimeout(later, remaining)
+      }
+    }
+
+    return throttled
+  },
+
+  sidebarPaddingR: () => {
+    const innerWidth = window.innerWidth
+    const clientWidth = document.body.clientWidth
+    const paddingRight = innerWidth - clientWidth
+    if (innerWidth !== clientWidth) {
+      $('body').css('padding-right', paddingRight)
+    }
+  },
+
+  scrollToDest: name => {
+    const scrollOffset = $(name).offset().top
+    let offset
+    if ($(window).scrollTop() > scrollOffset) {
+      offset = 65
+    } else {
+      offset = 0
+    }
+    $('body,html').animate({
+      scrollTop: scrollOffset - offset
+    })
+  },
+
+  snackbarShow: (text, showAction, duration) => {
+    const sa = (typeof showAction !== 'undefined') ? showAction : false
+    const dur = (typeof duration !== 'undefined') ? duration : 2000
+    const position = GLOBAL_CONFIG.Snackbar.position
+    const bg = document.documentElement.getAttribute('data-theme') === 'light' ? GLOBAL_CONFIG.Snackbar.bgLight : GLOBAL_CONFIG.Snackbar.bgDark
+    Snackbar.show({
+      text: text,
+      backgroundColor: bg,
+      showAction: sa,
+      duration: dur,
+      pos: position
+    })
+  },
+
+  initJustifiedGallery: function (selector) {
+    selector.each(function (i, o) {
+      if ($(this).is(':visible')) {
+        $(this).justifiedGallery({
+          rowHeight: 220,
+          margins: 4
+        })
+      }
+    })
+  },
+
+  diffDate: (d, more = false) => {
+    const dateNow = new Date()
+    const datePost = new Date(d)
+    const dateDiff = dateNow.getTime() - datePost.getTime()
+    const minute = 1000 * 60
+    const hour = minute * 60
+    const day = hour * 24
+    const month = day * 30
+
+    let result
+    if (more) {
+      const monthCount = dateDiff / month
+      const dayCount = dateDiff / day
+      const hourCount = dateDiff / hour
+      const minuteCount = dateDiff / minute
+
+      if (monthCount > 12) {
+        result = datePost.toLocaleDateString().replace(/\//g, '-')
+      } else if (monthCount >= 1) {
+        result = parseInt(monthCount) + ' ' + GLOBAL_CONFIG.date_suffix.month
+      } else if (dayCount >= 1) {
+        result = parseInt(dayCount) + ' ' + GLOBAL_CONFIG.date_suffix.day
+      } else if (hourCount >= 1) {
+        result = parseInt(hourCount) + ' ' + GLOBAL_CONFIG.date_suffix.hour
+      } else if (minuteCount >= 1) {
+        result = parseInt(minuteCount) + ' ' + GLOBAL_CONFIG.date_suffix.min
+      } else {
+        result = GLOBAL_CONFIG.date_suffix.just
+      }
+    } else {
+      result = parseInt(dateDiff / day)
+    }
+    return result
+  },
+
+  loadComment: (dom, callback) => {
+    if ('IntersectionObserver' in window) {
+      const observerItem = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          callback()
+          observerItem.disconnect()
+        }
+      }, { threshold: [0] })
+      observerItem.observe(dom)
+    } else {
+      callback()
+    }
+  }
+}

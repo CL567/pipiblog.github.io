@@ -98,3 +98,12 @@ img {
   color: #fff;
   background-color: #49b1f5;
 }
+
+
+#look-me {
+  background-color: transparent !important;
+}
+/* 右下角gif */
+#upj {
+  transform: translate(-100px,-120px) !important;
+}

@@ -1,8 +1,9 @@
 $(function(){
+    console.log('in-----');
     /*添加图片top*/
-    var top_up = "<img id='upj' class='upj' style='max-width: 1000%; transform: translate(-70px,-70px);' src='https://cdn.jsdelivr.net/gh/lete114/CDN/Use/up.gif' title='回到顶部' >";
-    /*添加到返回顶部按钮下*/
-    console.log($('#go-up'));
+    var top_up = "<button type='button' title='看我看我' id='look-me'>\
+                <img id='upj' class='upj' style='max-width: 300%;' src='https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1607067753274&di=8d442456739788b76b5631188631509b&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F0f3c1871303e4e3604ba8b6655837b4a5a40337c614fe-aptSvN_fw658'>\
+                </button>";
     $('#go-up').parent().append(top_up);
     // document.getElementById("go-up").innerHTML += top_up;
   // 气泡

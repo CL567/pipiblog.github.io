@@ -469,3 +469,4 @@ const [state, setState, submitFn, ] = useModal();
        [useMemo和useEffect有什么区别？怎么使用useMemo](https://www.jianshu.com/p/94ace269414d)
        [React组件Render Props VS HOC 设计模式](https://www.imooc.com/article/79154)
        [什么时候使用 USEMEMO 和 USECALLBACK](https://www.freesion.com/article/5948405874/)
+       [React Hooks: 深入剖析 useMemo 和 useEffect](https://zhuanlan.zhihu.com/p/268802571?utm_source=wechat_timeline)

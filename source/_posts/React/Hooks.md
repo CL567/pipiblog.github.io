@@ -35,6 +35,7 @@ const DisplayTheSecret = props =>
 );
 ```
 const WrappedComponent = withSecretToLife(DisplayTheSecret);
+
 export default WrappedComponent;
 import React from 'react';
 const withSecretToLife = (WrappedComponent) => {
@@ -47,6 +48,7 @@ const withSecretToLife = (WrappedComponent) => {
   }
   return HOC;
 };
+
 export default withSecretToLife;
 </code>
 </pre>
@@ -71,6 +73,7 @@ const SharedComponent extends React.Component {
     ```
   }
 }
+
 export default SharedComponent;
 import React from 'react';
 import SharedComponent from 'components/SharedComponent';
@@ -182,6 +185,7 @@ const LayoutDemo = () => {
   return <button onClick={handleClick}>{count}</button>;
   ```
 };
+
 export default LayoutDemo;
 </code>
 </pre>
@@ -225,6 +229,7 @@ const MemoExample = (props: any) => {
       </Fragment>)
   ```
 }
+
 export default MemoExample
 </code>
 </pre>

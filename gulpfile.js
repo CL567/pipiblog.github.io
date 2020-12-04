@@ -16,7 +16,7 @@ gulp.task('minify-css', function (done) {
 
 // 压缩html文件
 gulp.task('minify-html', function (done) {
-    return gulp.src('./public/**/*.html')
+    return gulp.src(['./public/**/*.html','!./public/^[0-9]+/**/*.html'])
         .pipe(htmlclean())
         .pipe(htmlmin({
             removeComments: true,

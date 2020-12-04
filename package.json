@@ -45,6 +45,7 @@
     "react-prism": "^4.3.2"
   },
   "devDependencies": {
-    "hexo-generator-calendar": "git://github.com/howiefh/hexo-generator-calendar.git"
+    "hexo-generator-calendar": "git://github.com/howiefh/hexo-generator-calendar.git",
+    "hexo-wordcount": "^6.0.1"
   }
 }

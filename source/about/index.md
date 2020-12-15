@@ -4,7 +4,7 @@ date: 2020-12-03 22:14:36
 keywords: 关于
 description: 个人的一些基本介绍，希望大家常联系
 comments: false
-top_img: https://cdn.jsdelivr.net/gh/cungudafa/cdn/img/banner/about.jpg
+top_img: "/img/yiren.jpg"
 ---
 
 ## 关于本人

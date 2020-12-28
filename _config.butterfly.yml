@@ -834,10 +834,10 @@ inject:
   head:
   - <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sviptzk/HexoStaticFile@latest/Hexo/css/custom.min.css">
   - <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/the-clong/the-clong.github.io/css/prism.css">
-  - <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/the-clong/the-clong.github.io/css/xktools.css">
+  - <link rel="stylesheet" href="/css/xktools.css">
   bottom:
     - <script src="https://cdn.jsdelivr.net/gh/sviptzk/StaticFile_HEXO@master/xkTool/v3.1.1/xkTool.js"></script>
-    - <script src="https://cdn.jsdelivr.net/gh/the-clong/the-clong.github.io/js/chocolate.js"></script>
+    - <script src="/js/chocolate.js"></script>
     - <script src="https://cdn.jsdelivr.net/gh/the-clong/the-clong.github.io/js/prism.js"></script>
 # calendar:
 #     single: true

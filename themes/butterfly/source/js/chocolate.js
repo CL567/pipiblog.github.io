@@ -1,5 +1,4 @@
 $(function(){
-    console.log('in-----');
     /*添加图片top*/
     var top_up = "<button type='button' title='看我看我' id='look-me'>\
                 <img id='upj' class='upj' style='max-width: 300%;' src='https://cdn.jsdelivr.net/gh/the-clong/the-clong.github.io/img/up.gif'>\
